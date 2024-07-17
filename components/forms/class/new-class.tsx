@@ -28,7 +28,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
+import { cn, genUUID } from "@/lib/utils";
 import { format } from "date-fns";
 import { TimePicker } from "@/components/ui/time-picker";
 import { useGetSession } from "@/lib/supabase/session";
@@ -57,23 +57,37 @@ export default function NewClassForm() {
     },
   });
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
   const onSubmit = (d: z.infer<typeof FormSchema>) => {
-    // return new Promise<classType>(async (resolve, reject) => {
-    return new Promise<z.infer<typeof FormSchema>>(async (resolve, reject) => {
-      // const supabase = supabaseClient();
+    return new Promise<classType>(async (resolve, reject) => {
+      // return new Promise<z.infer<typeof FormSchema>>(async (resolve, reject) => {
+      const supabase = supabaseClient();
 
-      // if (error) {
-      //   reject(error);
-      // }
+      const time_start = format(d.class_start, "yyyy-MM-dd'T'HH:mm:ssXXX");
+      const time_end = format(d.class_end, "yyyy-MM-dd'T'HH:mm:ssXXX");
+      const class_id = genUUID();
 
-      resolve(d);
-      // router.push("/login");
+      const { data, error } = await supabase
+        .from("classes")
+        .insert({
+          teacher_name: d.teacher_name,
+          teacher_id: d.teacher_id,
+          class_name: d.class_name,
+          class_id: class_id,
+          class_start: time_start,
+          class_end: time_end,
+          location: d.class_location,
+        })
+        .select("*")
+        .single();
+
+      if (error) {
+        reject(error);
+      } else {
+        resolve(data!);
+        router.push(`/class/${data?.class_id!}`);
+      }
+
+      // resolve(d.class_start);
     });
   };
 
@@ -88,6 +102,7 @@ export default function NewClassForm() {
                 <code>{JSON.stringify(data, null, 2)}</code>
               </pre>
             ),
+            // success: (data) => `Class Created`,
             error: (err) => `Error: ${err.message}`,
           });
         })}
@@ -203,7 +218,7 @@ export default function NewClassForm() {
                     >
                       <CalendarIcon className='mr-2 h-4 w-4' />
                       {field.value ? (
-                        format(field.value, "PPP HH:mm:ss")
+                        format(field.value, "PPP p")
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -243,7 +258,7 @@ export default function NewClassForm() {
                     >
                       <CalendarIcon className='mr-2 h-4 w-4' />
                       {field.value ? (
-                        format(field.value, "PPP HH:mm:ss")
+                        format(field.value, "PPP p")
                       ) : (
                         <span>Pick a date</span>
                       )}

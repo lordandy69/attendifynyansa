@@ -8,6 +8,7 @@ import {
   getDateByType,
   setDateByType,
 } from "@/lib/utils";
+import { format } from "date-fns";
 import React from "react";
 
 export interface TimePickerInputProps
@@ -87,7 +88,12 @@ const TimePickerInput = React.forwardRef<
         const newValue = getArrowByType(calculatedValue, step, picker);
         if (flag) setFlag(false);
         const tempDate = new Date(date);
-        setDate(setDateByType(tempDate, newValue, picker, period));
+        // setDate(setDateByType(tempDate, newValue, picker, period));
+        const formattedDate = format(
+          setDateByType(tempDate, newValue, picker, period),
+          "yyyy-MM-dd'T'HH:mm:ssXXX"
+        );
+        setDate(new Date(formattedDate));
       }
       if (e.key >= "0" && e.key <= "9") {
         if (picker === "12hours") setPrevIntKey(e.key);
@@ -96,7 +102,12 @@ const TimePickerInput = React.forwardRef<
         if (flag) onRightFocus?.();
         setFlag((prev) => !prev);
         const tempDate = new Date(date);
-        setDate(setDateByType(tempDate, newValue, picker, period));
+        // setDate(setDateByType(tempDate, newValue, picker, period));
+        const formattedDate = format(
+          setDateByType(tempDate, newValue, picker, period),
+          "yyyy-MM-dd'T'HH:mm:ssXXX"
+        );
+        setDate(new Date(formattedDate));
       }
     };
 

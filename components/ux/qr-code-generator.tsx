@@ -19,10 +19,24 @@ export function useQRCodeGenerator() {
     inputString,
     handleInputChange,
     generateQRCode,
-    QRCodeComponent: () => (
+    QRCodeComponentWithInput: () => (
       <QRCodeSVG
         value={qrCodeValue}
         size={256}
+        level={"H"}
+        includeMargin={true}
+      />
+    ),
+    QRCodeComponent: ({
+      qrcodevalue,
+      size,
+    }: {
+      qrcodevalue: string;
+      size?: number;
+    }) => (
+      <QRCodeSVG
+        value={qrcodevalue}
+        size={!size ? 256 : size}
         level={"H"}
         includeMargin={true}
       />

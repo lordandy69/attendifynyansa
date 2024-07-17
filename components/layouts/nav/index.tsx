@@ -56,7 +56,7 @@ export function Navbar() {
       <section
         className={cn(
           "animate-in fixed top-0 left-1/2 -translate-x-1/2 transform",
-          "w-full max-w-2xl border-b border-neutral-200 py-4"
+          "w-full max-w-2xl border-b border-neutral-200 bg-white py-4"
         )}
       >
         <div className='flex items-center w-full justify-between'>
