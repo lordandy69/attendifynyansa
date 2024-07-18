@@ -28,6 +28,7 @@ export function Navbar() {
   const [showContact, setShowContact] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const { user, profile } = useGetSession();
+  console.log(user);
 
   function handleContactClick() {
     setShowContact((s) => !s);
@@ -88,7 +89,7 @@ export function Navbar() {
             )}
           </div>
           <div>
-            {!user?.id ? (
+            {user == null ? (
               <div className='flex items-center space-x-4'>
                 <Link href={"/login"}>Login</Link>
                 <Link href={"/create-account"}>Create Account</Link>

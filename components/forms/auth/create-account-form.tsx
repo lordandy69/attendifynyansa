@@ -86,7 +86,7 @@ export default function CreateAccountForm() {
           data: {
             full_name: `${d.first_name} ${d.last_name}`,
           },
-          emailRedirectTo: `${location.origin}/auth/callback`,
+          // emailRedirectTo: `${location.origin}/auth/callback`,
         },
       });
 

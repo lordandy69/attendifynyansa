@@ -38,6 +38,7 @@ export function useGetSession() {
   useEffect(() => {
     if (!session?.user) {
       removeProfile(null);
+      removeUser(null);
     } else {
       supabase
         .from("user_profiles")
@@ -48,7 +49,7 @@ export function useGetSession() {
           updateProfile(data);
         });
     }
-  }, [removeProfile, session?.user, supabase, updateProfile]);
+  }, [removeProfile, removeUser, session?.user, supabase, updateProfile]);
   // !session?.user.email ? console.log("Not Logged In") : console.log(profile);
 
   return { session, user, profile };

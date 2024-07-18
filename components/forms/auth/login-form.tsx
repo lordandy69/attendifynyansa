@@ -36,14 +36,6 @@ export default function LoginForm() {
     },
   });
 
-  const { user } = useUserStore((state) => state);
-
-  useEffect(() => {
-    if (user) {
-      router.push("/");
-    }
-  }, [router, user]);
-
   const [submit, setSubmit] = useState("Login");
   const [showPassword, setShowPassword] = useState(false);
 
