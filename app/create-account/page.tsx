@@ -13,7 +13,7 @@ export default function Page() {
           href={"/"}
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            " space-x-2 absolute top-4 left-4 group inline-flex w-max items-center justify-center text-gray-600 hover:text-black rounded-full text-sm font-medium transition-colors focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+            " space-x-2 absolute top-20 left-4 group inline-flex w-max items-center justify-center text-gray-600 hover:text-black rounded-full text-sm font-medium transition-colors focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
           )}
         >
           <span>

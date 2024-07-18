@@ -48,7 +48,7 @@ export function useGetSession() {
           updateProfile(data);
         });
     }
-  }, [session?.user]);
+  }, [removeProfile, session?.user, supabase, updateProfile]);
   // !session?.user.email ? console.log("Not Logged In") : console.log(profile);
 
   return { session, user, profile };

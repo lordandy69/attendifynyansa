@@ -9,8 +9,6 @@ export default function Page() {
   const { profile, user } = useGetSession();
   const router = useRouter();
 
-  if (!user) return redirect("/");
-
   return (
     <main className='mt-24'>
       <div className='mx-auto max-w-2xl flex flex-col p-4'>
@@ -43,7 +41,7 @@ export default function Page() {
                   },
                   error: (err: any) => `Error: ${err.message}`,
                 });
-                router.refresh();
+                router.push("/");
               }}
             >
               Log Out

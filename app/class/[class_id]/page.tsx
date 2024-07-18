@@ -1,20 +1,18 @@
 "use client";
-import { Button, buttonVariants } from "@/components/ui/button";
 import { useGetClasses } from "@/components/ux/get-classes";
 import { useQRCodeGenerator } from "@/components/ux/qr-code-generator";
-import { toBlob } from "@/lib/image";
-import download from "@/lib/constants/download";
-import FrameContextStore, { FrameContext } from "@/lib/store/FrameContextStore";
-import { cn } from "@/lib/utils";
+import { FrameContext } from "@/lib/store/FrameContextStore";
 import { format, parseISO, isValid } from "date-fns";
-import Link from "next/link";
 import { useContext } from "react";
 import ExportButton from "@/components/ux/ExportButton";
+import { useGetSession } from "@/lib/supabase/session";
+import { redirect } from "next/navigation";
 
 type props = {
   params: { class_id: string };
 };
 export default function Page({ params }: props) {
+  const { user } = useGetSession();
   const { class_data } = useGetClasses(params.class_id);
   const frameContext = useContext(FrameContext);
   const { QRCodeComponent } = useQRCodeGenerator();
@@ -88,13 +86,17 @@ export default function Page({ params }: props) {
             </div>
           </div>
           <div className='flex flex-col my-10 border-t items-center border-neutral-200'>
-            <p className='py-10'>
-              No Classes ...Create New Class {params.class_id}
-            </p>
-            <div>
-              <pre>
-                <code>{JSON.stringify(class_data, null, 2)}</code>
-              </pre>
+            <div className='flex flex-col w-full'>
+              <p className='mb-2'>Studens Who Joined</p>
+              {!class_data?.students_joined ? (
+                <p className=''>No Students have Joined</p>
+              ) : (
+                <ol className='flex flex-col items-start w-full list-disc'>
+                  {class_data.students_joined.map((c) => {
+                    return <li key={c.student_id}>{c.student_email}</li>;
+                  })}
+                </ol>
+              )}
             </div>
           </div>
         </section>

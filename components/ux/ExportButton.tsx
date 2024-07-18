@@ -54,7 +54,8 @@ const ExportButton: React.FC = () => {
 
   return (
     <Button onClick={handleExportClick} aria-label='Export as PNG'>
-      Export <span className='hidden md:inline-block'>Image</span>
+      Export{" "}
+      <span className='hidden md:inline-block underline-offset-4'>Image</span>
     </Button>
   );
 };

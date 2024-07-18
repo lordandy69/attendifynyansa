@@ -12,6 +12,7 @@ export default function Page() {
   const router = useRouter();
   const { all_class_data } = useGetAllClasses(profile?.user_id!);
 
+  if (!user) return redirect("/");
   return (
     <main className='mt-24'>
       <div className='mx-auto max-w-2xl p-4 flex flex-col'>
