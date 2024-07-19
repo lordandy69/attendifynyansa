@@ -97,12 +97,12 @@ export default function NewClassForm() {
         onSubmit={form.handleSubmit((data) => {
           return toast.promise(onSubmit(data), {
             loading: "Creating Class...",
-            success: (data) => (
-              <pre>
-                <code>{JSON.stringify(data, null, 2)}</code>
-              </pre>
-            ),
-            // success: (data) => `Class Created`,
+            // success: (data) => (
+            //   <pre>
+            //     <code>{JSON.stringify(data, null, 2)}</code>
+            //   </pre>
+            // ),
+            success: (data) => `Class Created`,
             error: (err) => `Error: ${err.message}`,
           });
         })}

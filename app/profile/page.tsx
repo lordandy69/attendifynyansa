@@ -27,7 +27,7 @@ export default function Page() {
             </div>
             <div className='flex flex-col'>
               <p className='font-medium'>Teacher Id</p>
-              <p className='text-neutral-500'>{profile?.index_number!}</p>
+              <p className='text-neutral-500'>{profile?.user_id!}</p>
             </div>
           </div>
           <div>

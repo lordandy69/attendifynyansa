@@ -42,6 +42,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabaseClient } from "@/lib/supabase/client";
+import { useGetSession } from "@/lib/supabase/session";
 
 const FormSchema = z
   .object({
@@ -70,6 +71,7 @@ export default function CreateAccountForm() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const { user } = useGetSession();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -89,13 +91,23 @@ export default function CreateAccountForm() {
           // emailRedirectTo: `${location.origin}/auth/callback`,
         },
       });
-
       if (error) {
-        reject(error);
-      }
+        reject(error?.message!);
+      } else {
+        // Alert.alert("Please check your inbox for email verification!");
+        const { data, error: dbError } = await supabase
+          .from("user_profiles")
+          .insert({
+            full_name: `${d.first_name} ${d.last_name}`,
+            email: d.email,
+          });
 
-      resolve(data);
-      router.push("/login");
+        if (dbError) {
+          reject("db:" + dbError?.message!);
+        }
+        resolve(data);
+        router.push("/login");
+      }
     });
   };
 
