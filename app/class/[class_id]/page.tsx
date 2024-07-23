@@ -3,19 +3,124 @@ import { useGetClasses } from "@/components/ux/get-classes";
 import { useQRCodeGenerator } from "@/components/ux/qr-code-generator";
 import { FrameContext } from "@/lib/store/FrameContextStore";
 import { format, parseISO, isValid } from "date-fns";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import ExportButton from "@/components/ux/ExportButton";
 import { useGetSession } from "@/lib/supabase/session";
 import { redirect } from "next/navigation";
+import { supabaseClient } from "@/lib/supabase/client";
+import { Database } from "@/types/supabase";
+import { studentsJoinedArray } from "@/types/types";
+import { Button } from "@/components/ui/button";
 
 type props = {
   params: { class_id: string };
 };
+
+type classData = Database["public"]["Tables"]["classes"]["Row"];
+type studentsDetailsProps =
+  | {
+      created_at: string;
+      email: string | null;
+      full_name: string | null;
+      id: number;
+      index_number: string | null;
+      is_teacher: boolean;
+      program_name: string | null;
+      user_id: string | null;
+    }[]
+  | null;
+
+async function fetchJoinedStudentsDetails(
+  joinedStudents: studentsJoinedArray[]
+) {
+  const detailedStudents = [];
+  const supabase = supabaseClient();
+
+  for (const student of joinedStudents) {
+    const { data, error } = await supabase
+      .from("user_profiles")
+      .select("*")
+      .eq("user_id", student.student_id)
+      .single();
+
+    if (data) {
+      detailedStudents.push(data);
+    }
+  }
+
+  return detailedStudents;
+}
+
 export default function Page({ params }: props) {
+  const supabase = supabaseClient();
   const { user } = useGetSession();
-  const { class_data } = useGetClasses(params.class_id);
+
+  const [class_data, setClassData] = useState<classData | null>(null);
+  const [joinedStudent, setJoinedStudents] =
+    useState<studentsDetailsProps>(null);
   const frameContext = useContext(FrameContext);
   const { QRCodeComponent } = useQRCodeGenerator();
+
+  console.log(joinedStudent);
+
+  useEffect(() => {
+    supabase
+      .from("classes")
+      .select("*")
+      .eq("class_id", params.class_id)
+      .single()
+      .then(({ data }) => {
+        setClassData(data);
+      });
+
+    supabase
+      .channel("get-custome-class-updates")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "classes",
+          filter: `class_id=eq.${params.class_id}`,
+        },
+        (payload) => {
+          console.log("Change received!", payload.new);
+          setClassData(payload.new as any);
+        }
+      )
+      .subscribe();
+  }, []);
+
+  // useEffect(() => {
+  //   const detailedStudents: {
+  //     created_at: string;
+  //     email: string | null;
+  //     full_name: string | null;
+  //     id: number;
+  //     index_number: string | null;
+  //     is_teacher: boolean;
+  //     program_name: string | null;
+  //     user_id: string | null;
+  //   }[] = [];
+  //   const jS = class_data?.students_joined;
+
+  //   if (jS && jS.length > 0) {
+  //     for (const s of jS) {
+  //       supabase
+  //         .from("user_profiles")
+  //         .select("*")
+  //         .eq("user_id", s.student_id)
+  //         .single()
+  //         .then(({ data }) => {
+  //           if (data) {
+  //             detailedStudents.push(data);
+  //           }
+  //         });
+  //     }
+  //   }
+
+  //   setJoinedStudents(detailedStudents as any);
+  // }, [class_data?.students_joined]);
 
   return (
     <main className='mt-24'>
@@ -87,15 +192,24 @@ export default function Page({ params }: props) {
           </div>
           <div className='flex flex-col my-10 border-t items-center border-neutral-200'>
             <div className='flex flex-col w-full'>
-              <p className='mb-2'>Studens Who Joined</p>
               {!class_data?.students_joined ? (
                 <p className=''>No Students have Joined</p>
               ) : (
-                <ol className='flex flex-col items-start w-full list-disc'>
-                  {class_data.students_joined.map((c) => {
-                    return <li key={c.student_id}>{c.student_email}</li>;
-                  })}
-                </ol>
+                <div className='flex flex-col'>
+                  <div className=' flex items-center space-x-4'>
+                    <p className='mb-2'>Studens Who Joined</p>
+                    <Button>Copy Joined Students</Button>
+                  </div>
+                  <ol className='flex flex-col items-start w-full list-disc'>
+                    {class_data.students_joined.map((c) => {
+                      return (
+                        <li key={c.student_id}>
+                          {c.full_name} - {c.student_email}
+                        </li>
+                      );
+                    })}
+                  </ol>
+                </div>
               )}
             </div>
           </div>

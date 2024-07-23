@@ -28,7 +28,6 @@ export function Navbar() {
   const [showContact, setShowContact] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const { user, profile } = useGetSession();
-  console.log(user);
 
   function handleContactClick() {
     setShowContact((s) => !s);

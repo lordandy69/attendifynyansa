@@ -18,23 +18,28 @@ export function useGetClasses(class_id: string) {
       .then(({ data }) => {
         setClassData(data);
       });
+  }, [class_id, supabase]);
 
+  useEffect(() => {
     supabase
-      .channel("get-class-updates")
+      .channel("get-custome-class-updates")
       .on(
         "postgres_changes",
         {
           event: "*",
           schema: "public",
           table: "classes",
-          filter: `${class_id}=eq.class_id`,
+          // filter: `class_id=eq.${class_id}`,
+          filter: "class_id=eq.gHrrws",
         },
         (payload) => {
+          console.log("Change received!", payload.new);
           setClassData(payload.new as classData);
         }
       )
       .subscribe();
-  }, [class_id, supabase]);
+  }, []);
+
   // !session?.user.email ? console.log("Not Logged In") : console.log(profile);
 
   return { class_data };

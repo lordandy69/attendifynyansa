@@ -106,6 +106,7 @@ export default function CreateAccountForm() {
           reject("db:" + dbError?.message!);
         }
         resolve(data);
+        // router.push("/login");
         router.push("/login");
       }
     });
