@@ -11,6 +11,7 @@ import { supabaseClient } from "@/lib/supabase/client";
 import { Database } from "@/types/supabase";
 import { studentsJoinedArray } from "@/types/types";
 import { Button } from "@/components/ui/button";
+import { JoinedStudentsTable } from "@/components/tables/students-joined";
 
 type props = {
   params: { class_id: string };
@@ -91,36 +92,82 @@ export default function Page({ params }: props) {
       .subscribe();
   }, []);
 
-  // useEffect(() => {
-  //   const detailedStudents: {
-  //     created_at: string;
-  //     email: string | null;
-  //     full_name: string | null;
-  //     id: number;
-  //     index_number: string | null;
-  //     is_teacher: boolean;
-  //     program_name: string | null;
-  //     user_id: string | null;
-  //   }[] = [];
-  //   const jS = class_data?.students_joined;
+  function exportStudentsToCSV() {
+    if (
+      !class_data?.students_joined ||
+      class_data.students_joined.length === 0
+    ) {
+      return "No student data available";
+    }
 
-  //   if (jS && jS.length > 0) {
-  //     for (const s of jS) {
-  //       supabase
-  //         .from("user_profiles")
-  //         .select("*")
-  //         .eq("user_id", s.student_id)
-  //         .single()
-  //         .then(({ data }) => {
-  //           if (data) {
-  //             detailedStudents.push(data);
-  //           }
-  //         });
-  //     }
+    const headers = [
+      "Student Email",
+      "Student ID",
+      "Student Full Name",
+      "Student Index Number",
+      "Student Program",
+    ];
+    const csvRows = [headers.join(",")];
+
+    class_data.students_joined.forEach((student: studentsJoinedArray) => {
+      const row = [
+        student.student_email,
+        student.student_id,
+        student.full_name,
+        student.index_number,
+        student.program_name,
+      ];
+      csvRows.push(row.join(","));
+    });
+
+    return csvRows.join("\n");
+  }
+
+  // function exportAndDownloadStudentsCSV() {
+  //   const csvContent = exportStudentsToCSV();
+
+  //   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  //   const link = document.createElement("a");
+  //   if (link.download !== undefined) {
+  //     const url = URL.createObjectURL(blob);
+  //     link.setAttribute("href", url);
+  //     link.setAttribute("download", `students_${class_data?.class_id!}.csv`);
+  //     link.style.visibility = "hidden";
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
   //   }
+  // }
 
-  //   setJoinedStudents(detailedStudents as any);
-  // }, [class_data?.students_joined]);
+  const [exportState, setExportState] = useState<
+    "export" | "exporting" | "exported"
+  >("export");
+
+  function exportAndDownloadStudentsCSV() {
+    setExportState("exporting");
+    const csvContent = exportStudentsToCSV();
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `students_${class_data?.class_id!}.csv`);
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+
+      setTimeout(() => {
+        link.click();
+        document.body.removeChild(link);
+        setExportState("exported");
+
+        // Reset to 'export' after 3 seconds
+        setTimeout(() => {
+          setExportState("export");
+        }, 3000);
+      }, 1000); // Simulate export process taking 1 second
+    }
+  }
 
   return (
     <main className='mt-24'>
@@ -196,19 +243,18 @@ export default function Page({ params }: props) {
                 <p className=''>No Students have Joined</p>
               ) : (
                 <div className='flex flex-col'>
-                  <div className=' flex items-center space-x-4'>
+                  <div className='flex flex-col md:flex-row items-center space-x-4 py-4 justify-between'>
                     <p className='mb-2'>Studens Who Joined</p>
-                    <Button>Copy Joined Students</Button>
+                    <Button
+                      onClick={exportAndDownloadStudentsCSV}
+                      disabled={exportState === "exporting"}
+                    >
+                      {exportState === "export" && "Export Students CSV"}
+                      {exportState === "exporting" && "Exporting..."}
+                      {exportState === "exported" && "Exported!"}
+                    </Button>
                   </div>
-                  <ol className='flex flex-col items-start w-full list-disc'>
-                    {class_data.students_joined.map((c) => {
-                      return (
-                        <li key={c.student_id}>
-                          {c.full_name} - {c.student_email}
-                        </li>
-                      );
-                    })}
-                  </ol>
+                  <JoinedStudentsTable data={class_data.students_joined} />
                 </div>
               )}
             </div>
