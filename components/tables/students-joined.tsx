@@ -48,14 +48,14 @@ export function JoinedStudentsTable({ data }: { data: studentsJoinedArray[] }) {
           onCheckedChange={(value: any) =>
             table.toggleAllPageRowsSelected(!!value)
           }
-          aria-label='Select all'
+          aria-label="Select all"
         />
       ),
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value: any) => row.toggleSelected(!!value)}
-          aria-label='Select row'
+          aria-label="Select row"
         />
       ),
       enableSorting: false,
@@ -65,7 +65,7 @@ export function JoinedStudentsTable({ data }: { data: studentsJoinedArray[] }) {
       accessorKey: "full_name",
       header: "Full Name",
       cell: ({ row }) => {
-        return <div className='capitalize'>{row.getValue("full_name")}</div>;
+        return <div className="capitalize">{row.getValue("full_name")}</div>;
       },
     },
     {
@@ -73,8 +73,19 @@ export function JoinedStudentsTable({ data }: { data: studentsJoinedArray[] }) {
       header: "Email",
       cell: ({ row }) => {
         return (
-          <div className='whitespace-nowrap'>
+          <div className="whitespace-nowrap">
             <p>{row.getValue("student_email")}</p>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "index_number",
+      header: "Index Number",
+      cell: ({ row }) => {
+        return (
+          <div className="whitespace-nowrap">
+            <p>{row.getValue("index_number")}</p>
           </div>
         );
       },
@@ -84,7 +95,7 @@ export function JoinedStudentsTable({ data }: { data: studentsJoinedArray[] }) {
       header: "Program",
       cell: ({ row }) => {
         return (
-          <div className='whitespace-nowrap'>
+          <div className="whitespace-nowrap">
             <p>{row.getValue("program_name")}</p>
           </div>
         );
@@ -120,9 +131,9 @@ export function JoinedStudentsTable({ data }: { data: studentsJoinedArray[] }) {
   });
 
   return (
-    <div className='w-full'>
-      <div className='rounded-md border'>
-        <ScrollArea className='w-full whitespace-nowrap'>
+    <div className="w-full">
+      <div className="rounded-md border">
+        <ScrollArea className="w-full whitespace-nowrap">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -163,7 +174,7 @@ export function JoinedStudentsTable({ data }: { data: studentsJoinedArray[] }) {
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className='h-24 text-center'
+                    className="h-24 text-center"
                   >
                     No results.
                   </TableCell>
@@ -171,26 +182,26 @@ export function JoinedStudentsTable({ data }: { data: studentsJoinedArray[] }) {
               )}
             </TableBody>
           </Table>
-          <ScrollBar orientation='horizontal' />
+          <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </div>
-      <div className='flex items-center justify-end space-x-2 py-4'>
-        <div className='text-muted-foreground flex-1 text-sm'>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="text-muted-foreground flex-1 text-sm">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        <div className='space-x-2'>
+        <div className="space-x-2">
           <Button
-            variant='outline'
-            size='sm'
+            variant="outline"
+            size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
             Previous
           </Button>
           <Button
-            variant='outline'
-            size='sm'
+            variant="outline"
+            size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
