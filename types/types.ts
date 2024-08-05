@@ -4,4 +4,5 @@ export type studentsJoinedArray = {
   full_name?: string;
   index_number?: string;
   program_name?: string;
+  class_name?: string;
 };

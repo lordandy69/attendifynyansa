@@ -80,6 +80,17 @@ export function JoinedStudentsTable({ data }: { data: studentsJoinedArray[] }) {
       },
     },
     {
+      accessorKey: "class_name",
+      header: "Class",
+      cell: ({ row }) => {
+        return (
+          <div className="whitespace-nowrap">
+            <p>{row.getValue("class_name")}</p>
+          </div>
+        );
+      },
+    },
+    {
       accessorKey: "index_number",
       header: "Index Number",
       cell: ({ row }) => {
