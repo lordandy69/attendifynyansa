@@ -152,7 +152,10 @@ export default function Page({ params }: props) {
     if (link.download !== undefined) {
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      link.setAttribute("download", `students_${class_data?.class_id!}.csv`);
+      link.setAttribute(
+        "download",
+        `students_${class_data?.class_id!}_${class_data?.class_name!}.csv`
+      );
       link.style.visibility = "hidden";
       document.body.appendChild(link);
 
@@ -170,61 +173,61 @@ export default function Page({ params }: props) {
   }
 
   return (
-    <main className='mt-24'>
-      <div className='mx-auto max-w-2xl p-4 flex flex-col'>
-        <section className=''>
-          <div className='grid md:grid-cols-2 gap-4'>
-            <div className='flex flex-col space-y-4'>
-              <div className='flex flex-col'>
-                <p className='text-sm font-medium underline'>Class Id</p>
-                <h2 className='text-neutral-500 py-1 px-2 rounded bg-neutral-200 w-fit'>
+    <main className="mt-24">
+      <div className="mx-auto max-w-2xl p-4 flex flex-col">
+        <section className="">
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="flex flex-col space-y-4">
+              <div className="flex flex-col">
+                <p className="text-sm font-medium underline">Class Id</p>
+                <h2 className="text-neutral-500 py-1 px-2 rounded bg-neutral-200 w-fit">
                   {class_data?.class_id}
                 </h2>
               </div>
               <div>
-                <p className='text-sm font-medium underline'>Class Name</p>
-                <h2 className='text-neutral-500'>{class_data?.class_name}</h2>
+                <p className="text-sm font-medium underline">Class Name</p>
+                <h2 className="text-neutral-500">{class_data?.class_name}</h2>
               </div>
               <div>
-                <p className='text-sm font-medium underline'>Created At</p>
-                <h2 className='text-neutral-500'>
+                <p className="text-sm font-medium underline">Created At</p>
+                <h2 className="text-neutral-500">
                   {class_data?.created_at!
                     ? format(parseISO(class_data?.created_at!), "PPP p")
                     : "date not available"}
                 </h2>
               </div>
               <div>
-                <p className='text-sm font-medium underline'>Teacher</p>
-                <h2 className='text-neutral-500'>{class_data?.teacher_name}</h2>
+                <p className="text-sm font-medium underline">Teacher</p>
+                <h2 className="text-neutral-500">{class_data?.teacher_name}</h2>
               </div>
               <div>
-                <p className='text-sm font-medium underline'>
+                <p className="text-sm font-medium underline">
                   Class Start Time
                 </p>
-                <h2 className='text-neutral-500'>
+                <h2 className="text-neutral-500">
                   {class_data?.class_start!
                     ? format(parseISO(class_data?.class_start!), "PPP p")
                     : "date not available"}
                 </h2>
               </div>
               <div>
-                <p className='text-sm font-medium underline'>Class End Time</p>
-                <h2 className='text-neutral-500'>
+                <p className="text-sm font-medium underline">Class End Time</p>
+                <h2 className="text-neutral-500">
                   {class_data?.class_end!
                     ? format(parseISO(class_data?.class_end!), "PPP p")
                     : "date not available"}
                 </h2>
               </div>
               <div>
-                <p className='text-sm font-medium underline'>Class Location</p>
-                <h2 className='text-neutral-500'>{class_data?.location!}</h2>
+                <p className="text-sm font-medium underline">Class Location</p>
+                <h2 className="text-neutral-500">{class_data?.location!}</h2>
               </div>
             </div>
-            <div className='flex flex-col items-center space-y-4'>
+            <div className="flex flex-col items-center space-y-4">
               <div
                 ref={frameContext}
-                id='frame'
-                className='flex flex-col items-center space-y-2 bg-white'
+                id="frame"
+                className="flex flex-col items-center space-y-2 bg-white"
               >
                 <QRCodeComponent
                   size={346}
@@ -237,14 +240,14 @@ export default function Page({ params }: props) {
               </div>
             </div>
           </div>
-          <div className='flex flex-col my-10 border-t items-center border-neutral-200'>
-            <div className='flex flex-col w-full'>
+          <div className="flex flex-col my-10 border-t items-center border-neutral-200">
+            <div className="flex flex-col w-full">
               {!class_data?.students_joined ? (
-                <p className=''>No Students have Joined</p>
+                <p className="">No Students have Joined</p>
               ) : (
-                <div className='flex flex-col'>
-                  <div className='flex flex-col md:flex-row items-center space-x-4 py-4 justify-between'>
-                    <p className='mb-2'>Studens Who Joined</p>
+                <div className="flex flex-col">
+                  <div className="flex flex-col md:flex-row items-center space-x-4 py-4 justify-between">
+                    <p className="mb-2">Studens Who Joined</p>
                     <Button
                       onClick={exportAndDownloadStudentsCSV}
                       disabled={exportState === "exporting"}
