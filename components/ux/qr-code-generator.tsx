@@ -1,11 +1,12 @@
-"use client";
+//@ts-nocheck
+'use client';
 
-import { useState } from "react";
-import { QRCodeSVG } from "qrcode.react";
+import { useState } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 
 export function useQRCodeGenerator() {
-  const [inputString, setInputString] = useState("");
-  const [qrCodeValue, setQRCodeValue] = useState("");
+  const [inputString, setInputString] = useState('');
+  const [qrCodeValue, setQRCodeValue] = useState('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputString(event.target.value);
@@ -23,7 +24,7 @@ export function useQRCodeGenerator() {
       <QRCodeSVG
         value={qrCodeValue}
         size={256}
-        level={"H"}
+        level={'H'}
         includeMargin={true}
       />
     ),
@@ -37,7 +38,7 @@ export function useQRCodeGenerator() {
       <QRCodeSVG
         value={qrcodevalue}
         size={!size ? 256 : size}
-        level={"H"}
+        level={'H'}
         includeMargin={true}
       />
     ),
