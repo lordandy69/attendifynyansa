@@ -150,7 +150,13 @@ function ClassComp({ c }: { c: classData }) {
           {c.teacher_name} <br /> {format(parseISO(c.created_at!), 'PPP p')}
         </p>
       </div>
-      <div>
+      <div className='flex items-center space-x-2'>
+        <Link
+          href={`/edit-class/${c.class_id}`}
+          className={cn(buttonVariants({}))}
+        >
+          Edit Class
+        </Link>
         <Link href={`/class/${c.class_id}`} className={cn(buttonVariants({}))}>
           View Class
         </Link>

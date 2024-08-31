@@ -1,10 +1,10 @@
-import LoginForm from "@/components/forms/auth/login-form";
-import { cn } from "@/lib/utils";
+import LoginForm from '@/components/forms/auth/login-form';
+import { cn } from '@/lib/utils';
 
-import Link from "next/link";
-import { ArrowLeft, UserIcon } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
-import Image from "next/image";
+import Link from 'next/link';
+import { ArrowLeft, UserIcon } from 'lucide-react';
+import { buttonVariants } from '@/components/ui/button';
+import Image from 'next/image';
 
 export default function Page() {
   return (
@@ -13,10 +13,10 @@ export default function Page() {
         {/* top */}
         {/* back absolute top */}
         <Link
-          href={"/"}
+          href={'/'}
           className={cn(
-            buttonVariants({ variant: "ghost" }),
-            " space-x-2 absolute top-20 left-4 group inline-flex w-max items-center justify-center text-gray-600 hover:text-black rounded-full text-sm font-medium transition-colors focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+            buttonVariants({ variant: 'ghost' }),
+            ' space-x-2 absolute top-20 left-4 group inline-flex w-max items-center justify-center text-gray-600 hover:text-black rounded-full text-sm font-medium transition-colors focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50'
           )}
         >
           <span>
@@ -28,7 +28,7 @@ export default function Page() {
           <div className='flex flex-col items-center justify-center pb-4 pt-2 w-full'>
             {/* icon */}
             {/* message */}
-            <div className={cn("text-center space-y-1")}>
+            <div className={cn('text-center space-y-1')}>
               <h2 className='text-2xl font-semibold'>Login to your account</h2>
               <p className='text-gray-400'>Enter your details to login.</p>
             </div>
@@ -38,7 +38,7 @@ export default function Page() {
             <div className='flex flex-row items-center space-x-1 text-sm'>
               <p>Don&apos;t have an account,</p>
               <Link
-                href={"/create-account"}
+                href={'/create-account'}
                 className='text-neutral-500 hover:text-black hover:underline'
               >
                 Create Account Here!

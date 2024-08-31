@@ -1,7 +1,10 @@
 import NewClassForm from "@/components/forms/class/new-class";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'New Class -- Time Trace',
+  description: 'Create A New Class',
+};
 
 export default function Page() {
   return (

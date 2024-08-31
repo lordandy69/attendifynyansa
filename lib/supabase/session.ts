@@ -1,10 +1,10 @@
-import { Session } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
-import { useUserStore } from "../store/user";
-import { Database } from "@/types/supabase";
-import { supabaseClient } from "./client";
+import { Session } from '@supabase/supabase-js';
+import { useEffect, useState } from 'react';
+import { useUserStore } from '../store/user';
+import { Database } from '@/types/supabase';
+import { supabaseClient } from './client';
 
-type useDataProps = Database["public"]["Tables"]["user_profiles"]["Row"];
+type useDataProps = Database['public']['Tables']['user_profiles']['Row'];
 
 export function useGetSession() {
   const supabase = supabaseClient();
@@ -41,9 +41,9 @@ export function useGetSession() {
       removeUser(null);
     } else {
       supabase
-        .from("user_profiles")
-        .select("*")
-        .eq("user_id", session?.user!.id!)
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', session?.user!.id!)
         .single()
         .then(({ data }) => {
           updateProfile(data);

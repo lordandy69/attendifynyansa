@@ -6,13 +6,14 @@ import { format, parseISO, isValid } from 'date-fns';
 import { useContext, useEffect, useState } from 'react';
 import ExportButton from '@/components/ux/ExportButton';
 import { useGetSession } from '@/lib/supabase/session';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { supabaseClient } from '@/lib/supabase/client';
 import { Database } from '@/types/supabase';
 import { studentsJoinedArray } from '@/types/types';
 import { Button } from '@/components/ui/button';
 import { JoinedStudentsTable } from '@/components/tables/students-joined';
 import { differenceInDays, isPast } from 'date-fns';
+import { toast } from 'sonner';
 
 type props = {
   params: { class_id: string };
@@ -75,6 +76,7 @@ function getClassStatus(classEndDate: string | null): {
 export default function Page({ params }: props) {
   const supabase = supabaseClient();
   const { user } = useGetSession();
+  const router = useRouter();
 
   const [class_data, setClassData] = useState<classData | null>(null);
   const [joinedStudent, setJoinedStudents] =
@@ -193,6 +195,36 @@ export default function Page({ params }: props) {
   }
   const classStatus = getClassStatus(class_data?.class_end!);
 
+  function DeleteClass() {
+    supabase
+      .from('classes')
+      .delete()
+      .eq('class_id', params.class_id)
+      .then(({ data }) => {
+        router.push('/class');
+        //navigate to all the classes
+      });
+  }
+
+  const handleDelteClass = () => {
+    return new Promise(async (resolve, reject) => {
+      const supabase = supabaseClient();
+
+      const { data, error, statusText } = await supabase
+        .from('classes')
+        .delete()
+        .eq('class_id', params.class_id);
+
+      if (error) {
+        reject(error);
+      } else {
+        resolve(statusText);
+        router.push('/class');
+      }
+
+      router.refresh();
+    });
+  };
   return (
     <main className='mt-24'>
       <div className='mx-auto max-w-2xl p-4 flex flex-col'>
@@ -289,6 +321,26 @@ export default function Page({ params }: props) {
                   <JoinedStudentsTable data={class_data.students_joined} />
                 </div>
               )}
+            </div>
+          </div>
+          {/* delete class */}
+          <div className='flex flex-col my-10 border-t items-center border-neutral-200'>
+            <div className='flex flex-col w-full space-y-2'>
+              <p className='text-xl font-medium'>Delete Class</p>
+              <p className=''>This will remove the class and its data.</p>
+              <Button
+                variant={'destructive'}
+                className='w-fit'
+                onClick={() =>
+                  toast.promise(handleDelteClass, {
+                    loading: 'Deleting Class...',
+                    success: (data: any) => `Class Deleted ${data}`,
+                    error: (err: any) => `Error: ${err.message}`,
+                  })
+                }
+              >
+                Delete Class
+              </Button>
             </div>
           </div>
         </section>
