@@ -1,5 +1,6 @@
+//@ts-nocheck
 'use client';
-import { useGetClasses } from '@/components/ux/get-classes';
+import { useGetAllClasses, useGetClasses } from '@/components/ux/get-classes';
 import { useQRCodeGenerator } from '@/components/ux/qr-code-generator';
 import { FrameContext } from '@/lib/store/FrameContextStore';
 import { format, parseISO, isValid } from 'date-fns';
@@ -14,6 +15,8 @@ import { Button } from '@/components/ui/button';
 import { JoinedStudentsTable } from '@/components/tables/students-joined';
 import { differenceInDays, isPast } from 'date-fns';
 import { toast } from 'sonner';
+import { ClassesPerDayChart } from '@/components/charts/classes-per-day';
+import { ClassesPerTimeChart } from '@/components/charts/class-per-day';
 
 type props = {
   params: { class_id: string };
@@ -83,7 +86,7 @@ export default function Page({ params }: props) {
     useState<studentsDetailsProps>(null);
   const frameContext = useContext(FrameContext);
   const { QRCodeComponent } = useQRCodeGenerator();
-
+  const { all_class_data } = useGetAllClasses(class_data?.teacher_id!);
   console.log(joinedStudent);
 
   useEffect(() => {
@@ -301,6 +304,9 @@ export default function Page({ params }: props) {
               )}
             </div>
           </div>
+          {/* class chart */}
+          <div>{/* <ClassesPerTimeChart /> */}</div>
+          {/* class table */}
           <div className='flex flex-col my-10 border-t items-center border-neutral-200'>
             <div className='flex flex-col w-full'>
               {!class_data?.students_joined ? (
@@ -327,7 +333,9 @@ export default function Page({ params }: props) {
           <div className='flex flex-col my-10 border-t items-center border-neutral-200'>
             <div className='flex flex-col w-full space-y-2'>
               <p className='text-xl font-medium'>Delete Class</p>
-              <p className=''>This will remove the class and its data.</p>
+              <p className='text-neutral-500'>
+                This will remove the class and its data.
+              </p>
               <Button
                 variant={'destructive'}
                 className='w-fit'

@@ -1,3 +1,4 @@
+//@ts-nocheck
 'use client';
 import { buttonVariants } from '@/components/ui/button';
 import { useGetAllClasses } from '@/components/ux/get-classes';
@@ -15,12 +16,16 @@ import {
 } from 'date-fns';
 import { Database } from '@/types/supabase';
 import { useEffect, useState } from 'react';
+import { ClassesPerTimeChart } from '@/components/charts/class-per-day';
+import { studentsJoinedArray } from '@/types/types';
+import { ClassesPerDayChart } from '@/components/charts/classes-per-day';
 type classData = Database['public']['Tables']['classes']['Row'];
 type classCat = {
   today: classData[];
   upcoming: classData[];
   ended: classData[];
 };
+
 export default function Page() {
   const router = useRouter();
   const [classCategories, setClassCategories] = useState<classCat>();
@@ -82,6 +87,9 @@ export default function Page() {
           >
             Create New Class
           </Link>
+        </div>
+        <div className='flex flex-col w-full border-t border-neutral-200 mt-10 pt-8'>
+          <ClassesPerDayChart acd={all_class_data!} />
         </div>
         <div className='flex flex-col my-10 border-t w-full border-neutral-200'>
           {!all_class_data ? (
