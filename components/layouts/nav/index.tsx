@@ -52,22 +52,22 @@ export function Navbar() {
   }
 
   return (
-    <nav className=''>
+    <nav className="">
       <section
         className={cn(
           "animate-in fixed top-0 left-1/2 -translate-x-1/2 transform",
-          "w-full max-w-2xl border-b border-neutral-200 bg-white p-4"
+          "w-96 max-w-2xl border-2 border-neutral-200 rounded-full bg-white my-6 lg:w-full p-4"
         )}
       >
-        <div className='flex items-center w-full justify-between'>
+        <div className="flex items-center w-full justify-between">
           <div>
-            <Link href={"/"} className='font-medium'>
+            <Link href={"/"} className="font-medium">
               Time Trace
             </Link>
           </div>
           <div>
             {!user ? null : (
-              <div className='flex items-center space-x-4'>
+              <div className="flex items-center space-x-4">
                 <Link
                   href={"/class"}
                   className={cn(
@@ -89,12 +89,12 @@ export function Navbar() {
           </div>
           <div>
             {user == null ? (
-              <div className='flex items-center space-x-4'>
+              <div className="flex items-center space-x-4">
                 <Link href={"/login"}>Login</Link>
                 <Link href={"/create-account"}>Create Account</Link>
               </div>
             ) : (
-              <div className='flex items-center space-x-2'>
+              <div className="flex items-center space-x-2">
                 <Link href={"/profile"}>{profile?.full_name}</Link>
               </div>
             )}
