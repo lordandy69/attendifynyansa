@@ -19,10 +19,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-slate-200`}>
-        <Navbar />
-        <FrameContextStore>{children}</FrameContextStore>
-        <Toaster position="bottom-right" theme="light" />
+      <body
+        className={`${inter.className} bg-blue-950  p-4 justify-center items-center  flex`}
+      >
+        <div className="bg-slate-200 rounded-3xl w-full  h-full flex justify-center items-center">
+          <Navbar />
+          <FrameContextStore>{children}</FrameContextStore>
+          <Toaster position="bottom-right" theme="light" />
+        </div>
       </body>
     </html>
   );
