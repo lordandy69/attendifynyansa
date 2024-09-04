@@ -14,7 +14,7 @@ export default async function Home() {
 
   return (
     <main className="bg-blue-950 h-screen p-4 justify-center items-center  flex ">
-      <section className="bg-white rounded-3xl w-full  h-full flex justify-center items-center">
+      <section className="bg-slate-200 rounded-3xl w-full  h-full flex justify-center items-center">
         <section className="mx-auto max-w-2xl flex flex-col items-center min-h-screen h-dvh justify-center p-4 space-y-6">
           <h2 className="flex flex-col items-center text-5xl font-bold">
             <span>Welcome to</span>

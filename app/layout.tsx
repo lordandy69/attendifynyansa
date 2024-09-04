@@ -18,11 +18,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <body className={inter.className}>
+    <html lang="en">
+      <body className={`${inter.className} bg-slate-200`}>
         <Navbar />
         <FrameContextStore>{children}</FrameContextStore>
-        <Toaster position='bottom-right' theme='light' />
+        <Toaster position="bottom-right" theme="light" />
       </body>
     </html>
   );
