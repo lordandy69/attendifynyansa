@@ -22,7 +22,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-blue-950  p-4 justify-center items-center  flex`}
       >
-        <div className="bg-slate-200 rounded-3xl w-full  h-full flex justify-center items-center">
+        <div className="bg-white rounded-3xl w-full  h-full flex justify-center items-center">
           <Navbar />
           <FrameContextStore>{children}</FrameContextStore>
           <Toaster position="bottom-right" theme="light" />
