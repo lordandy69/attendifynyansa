@@ -5,4 +5,10 @@ export type studentsJoinedArray = {
   index_number?: string;
   program_name?: string;
   class_name?: string;
+    join_id?: string;
+};
+
+export type rndClassCodes = {
+  id: number;
+  code: string;
 };

@@ -1,9 +1,9 @@
-"use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+'use client';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -12,36 +12,47 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { CalendarIcon, Eye, EyeOff, Lock, Mail, User2 } from "lucide-react";
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { supabaseClient } from "@/lib/supabase/client";
-import { Database } from "@/types/supabase";
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { CalendarIcon, Eye, EyeOff, Lock, Mail, User2 } from 'lucide-react';
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { supabaseClient } from '@/lib/supabase/client';
+import { Database } from '@/types/supabase';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { cn, genUUID } from "@/lib/utils";
-import { format } from "date-fns";
-import { TimePicker } from "@/components/ui/time-picker";
-import { useGetSession } from "@/lib/supabase/session";
+} from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { cn, genUUID } from '@/lib/utils';
+import { format } from 'date-fns';
+import { TimePicker } from '@/components/ui/time-picker';
+import { useGetSession } from '@/lib/supabase/session';
 
-type classType = Database["public"]["Tables"]["classes"]["Row"];
+type classType = Database['public']['Tables']['classes']['Row'];
+
+export function genRandomCode(index: number): { id: number; code: string } {
+  return {
+    id: index,
+    code: Math.floor(1000 + Math.random() * 9000).toString(),
+  };
+}
+
+export function genRandomCodes(count: number): { id: number; code: string }[] {
+  return Array.from({ length: count }, (_, index) => genRandomCode(index));
+}
 
 const FormSchema = z.object({
-  teacher_name: z.string().min(1, { message: "Is Required" }),
-  teacher_id: z.string().min(1, { message: "Is Required" }),
-  class_name: z.string().min(1, { message: "Is Required" }),
+  teacher_name: z.string().min(1, { message: 'Is Required' }),
+  teacher_id: z.string().min(1, { message: 'Is Required' }),
+  class_name: z.string().min(1, { message: 'Is Required' }),
   class_start: z.date(),
   class_end: z.date(),
-  class_location: z.string().min(1, { message: "Is Required" }),
+  class_location: z.string().min(1, { message: 'Is Required' }),
 });
 
 export default function NewClassForm() {
@@ -52,10 +63,12 @@ export default function NewClassForm() {
     defaultValues: {
       teacher_name: profile?.full_name!,
       teacher_id: profile?.user_id!,
-      class_name: "",
-      class_location: "",
+      class_name: '',
+      class_location: '',
     },
   });
+
+  const randomCodes = genRandomCodes(150);
 
   const onSubmit = (d: z.infer<typeof FormSchema>) => {
     return new Promise<classType>(async (resolve, reject) => {
@@ -67,7 +80,7 @@ export default function NewClassForm() {
       const class_id = genUUID();
 
       const { data, error } = await supabase
-        .from("classes")
+        .from('classes')
         .insert({
           teacher_name: d.teacher_name,
           teacher_id: d.teacher_id,
@@ -76,8 +89,9 @@ export default function NewClassForm() {
           class_start: time_start,
           class_end: time_end,
           location: d.class_location,
+          rnd_codes: randomCodes,
         })
-        .select("*")
+        .select('*')
         .single();
 
       if (error) {
@@ -96,7 +110,7 @@ export default function NewClassForm() {
       <form
         onSubmit={form.handleSubmit((data) => {
           return toast.promise(onSubmit(data), {
-            loading: "Creating Class...",
+            loading: 'Creating Class...',
             // success: (data) => (
             //   <pre>
             //     <code>{JSON.stringify(data, null, 2)}</code>
@@ -212,13 +226,13 @@ export default function NewClassForm() {
                     <Button
                       variant='outline'
                       className={cn(
-                        "w-[280px] justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground"
+                        'w-[280px] justify-start text-left font-normal',
+                        !field.value && 'text-muted-foreground'
                       )}
                     >
                       <CalendarIcon className='mr-2 h-4 w-4' />
                       {field.value ? (
-                        format(field.value, "PPP p")
+                        format(field.value, 'PPP p')
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -252,13 +266,13 @@ export default function NewClassForm() {
                     <Button
                       variant='outline'
                       className={cn(
-                        "w-[280px] justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground"
+                        'w-[280px] justify-start text-left font-normal',
+                        !field.value && 'text-muted-foreground'
                       )}
                     >
                       <CalendarIcon className='mr-2 h-4 w-4' />
                       {field.value ? (
-                        format(field.value, "PPP p")
+                        format(field.value, 'PPP p')
                       ) : (
                         <span>Pick a date</span>
                       )}

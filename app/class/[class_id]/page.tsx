@@ -76,6 +76,32 @@ function getClassStatus(classEndDate: string | null): {
   }
 }
 
+const getNextAvailableCodeIndex = (
+  joinedStudents: studentsJoinedArray[],
+  rndCodes: { id: number; code: string }[]
+) => {
+  const usedCodes = new Set(
+    joinedStudents.map((student) => student.random_code)
+  );
+  return rndCodes.findIndex((code) => !usedCodes.has(code.code));
+};
+
+function getJoinIdInfo(joinId: string, classData: classData) {
+  const joinIdInRndCodes = classData.rnd_codes.find(
+    (rnd) => rnd.code === joinId
+  );
+  const nextRndCode = classData.rnd_codes[joinIdInRndCodes?.id! + 1];
+
+  // const currentRndCodeIndex = classData.rnd_codes.findIndex(
+  //   (code) => code.code === currentRndCode
+  // );
+
+  // const nextRndCodeIndex = currentRndCodeIndex + 1;
+  // const nextRndCode = classData.rnd_codes[nextRndCodeIndex];
+
+  return nextRndCode;
+}
+
 export default function Page({ params }: props) {
   const supabase = supabaseClient();
   const { user } = useGetSession();
@@ -87,7 +113,26 @@ export default function Page({ params }: props) {
   const frameContext = useContext(FrameContext);
   const { QRCodeComponent } = useQRCodeGenerator();
   const { all_class_data } = useGetAllClasses(class_data?.teacher_id!);
-  console.log(joinedStudent);
+  const [currentCodeIndex, setCurrentCodeIndex] = useState(0);
+
+  const qrCodeValue = `${class_data?.class_id}-${class_data?.rnd_codes?.[currentCodeIndex]?.code}`;
+
+  // console.log(class_data?.students_joined!);
+
+  useEffect(() => {
+    const lastJoinedStudent = class_data?.students_joined?.slice(-1)[0];
+    const firstRandomCode = class_data?.rnd_codes?.[0];
+    const lsj = class_data?.rnd_codes.find(
+      (rnd) => rnd.code === lastJoinedStudent?.join_id!
+    );
+    const ljs_id = lsj?.id;
+    const frc_id = 0;
+
+    const joinIdInRndCodes = !class_data?.students_joined! ? frc_id! : ljs_id!;
+    const nextRndCode = class_data?.rnd_codes[joinIdInRndCodes + 1];
+
+    setCurrentCodeIndex(nextRndCode?.id!);
+  });
 
   useEffect(() => {
     supabase
@@ -147,6 +192,9 @@ export default function Page({ params }: props) {
 
     return csvRows.join('\n');
   }
+
+  // const joinIdInfo = getJoinIdInfo('5464', class_data);
+  // console.log(joinIdInfo);
 
   // function exportAndDownloadStudentsCSV() {
   //   const csvContent = exportStudentsToCSV();
@@ -278,6 +326,14 @@ export default function Page({ params }: props) {
                 <p className='text-sm font-medium underline'>Class Location</p>
                 <h2 className='text-neutral-500'>{class_data?.location!}</h2>
               </div>
+              <div>
+                <p className='text-sm font-medium underline'>
+                  Current Joinning Code
+                </p>
+                <h2 className='text-neutral-500'>
+                  {class_data?.rnd_codes?.[currentCodeIndex]?.code}
+                </h2>
+              </div>
             </div>
             <div className='flex flex-col py-4'>
               {classStatus.status === 'Class Upcoming' ? (
@@ -287,10 +343,7 @@ export default function Page({ params }: props) {
                     id='frame'
                     className='flex flex-col items-center space-y-2 bg-white'
                   >
-                    <QRCodeComponent
-                      size={346}
-                      qrcodevalue={class_data?.class_id!}
-                    />
+                    <QRCodeComponent size={346} qrcodevalue={qrCodeValue} />
                     <p>{class_data?.class_name}</p>
                   </div>
                   <div>

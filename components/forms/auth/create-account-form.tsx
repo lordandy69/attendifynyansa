@@ -1,7 +1,7 @@
-"use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+'use client';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
 // export const registerUserSchema = z
 //   .object({
@@ -24,7 +24,7 @@ import * as z from "zod";
 //     }
 //   });
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -33,28 +33,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { Eye, EyeOff, Lock, Mail, User2 } from "lucide-react";
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { supabaseClient } from "@/lib/supabase/client";
-import { useGetSession } from "@/lib/supabase/session";
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { Eye, EyeOff, Lock, Mail, User2 } from 'lucide-react';
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { supabaseClient } from '@/lib/supabase/client';
+import { useGetSession } from '@/lib/supabase/session';
 
 const FormSchema = z
   .object({
-    first_name: z.string().min(1, { message: "First Name Is Required" }),
-    last_name: z.string().min(1, { message: "Last Name Is Required" }),
-    email: z.string().email({ message: "Please enter a valid email address." }),
+    first_name: z.string().min(1, { message: 'First Name Is Required' }),
+    last_name: z.string().min(1, { message: 'Last Name Is Required' }),
+    email: z.string().email({ message: 'Please enter a valid email address.' }),
     password: z.string().min(6),
     confirmPassword: z.string().min(6),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ["confirmPassword"],
+    path: ['confirmPassword'],
   });
 
 export default function CreateAccountForm() {
@@ -62,11 +62,11 @@ export default function CreateAccountForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      first_name: '',
+      last_name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
@@ -96,18 +96,18 @@ export default function CreateAccountForm() {
       } else {
         // Alert.alert("Please check your inbox for email verification!");
         const { data, error: dbError } = await supabase
-          .from("user_profiles")
+          .from('user_profiles')
           .insert({
             full_name: `${d.first_name} ${d.last_name}`,
             email: d.email,
           });
 
         if (dbError) {
-          reject("db:" + dbError?.message!);
+          reject('db:' + dbError?.message!);
         }
         resolve(data);
         // router.push("/login");
-        router.push("/login");
+        router.push('/login');
       }
     });
   };
@@ -117,7 +117,7 @@ export default function CreateAccountForm() {
       <form
         onSubmit={form.handleSubmit((data) => {
           return toast.promise(onSubmit(data), {
-            loading: "Creating Account...",
+            loading: 'Creating Account...',
             success: (data: any) => `Verify Email At : ${data.user?.email}`,
             error: (err) => `Error: ${err.message}`,
           });
@@ -203,7 +203,7 @@ export default function CreateAccountForm() {
                     <Lock className='h-[18px] w-[18px] text-gray-400' />
                   </span>
                   <Input
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     className='w-full'
                     password
                     withIcon
@@ -238,7 +238,7 @@ export default function CreateAccountForm() {
                     <Lock className='h-[18px] w-[18px] text-gray-400' />
                   </span>
                   <Input
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     className='w-full'
                     password
                     withIcon
@@ -268,7 +268,7 @@ export default function CreateAccountForm() {
           <div className='flex flex-row items-center space-x-1 text-sm text-center justify-center mb-3'>
             <span>Already have an account,</span>
             <Link
-              href={"/login"}
+              href={'/login'}
               className='text-neutral-500 hover:text-black hover:underline'
             >
               Log In!
@@ -279,7 +279,7 @@ export default function CreateAccountForm() {
           </span>
           <br />
           <Link
-            href={"/terms-and-conditions"}
+            href={'/terms-and-conditions'}
             className='text-neutral-500 hover:text-black hover:underline'
           >
             Terms and Conditions

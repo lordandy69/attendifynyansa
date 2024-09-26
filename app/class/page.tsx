@@ -34,6 +34,7 @@ export default function Page() {
   const today = classCategories?.today!;
   const upcoming = classCategories?.upcoming!;
   const ended = classCategories?.ended!;
+
   function categorizeClasses(classes: classData[]): {
     today: classData[];
     upcoming: classData[];
