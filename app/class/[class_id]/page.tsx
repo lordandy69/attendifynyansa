@@ -118,7 +118,7 @@ export default function Page({ params }: props) {
   const qrCodeValue = `${class_data?.class_id}-${class_data?.rnd_codes?.[currentCodeIndex]?.code}`;
 
   // console.log(class_data?.students_joined!);
-
+  // minot
   useEffect(() => {
     const lastJoinedStudent = class_data?.students_joined?.slice(-1)[0];
     const firstRandomCode = class_data?.rnd_codes?.[0];
