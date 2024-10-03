@@ -244,6 +244,9 @@ export default function NewClassForm() {
                     mode='single'
                     selected={field.value}
                     onSelect={field.onChange}
+                    disabled={(date) =>
+                      date < new Date(new Date().setHours(0, 0, 0, 0))
+                    }
                     initialFocus
                   />
                   <div className='p-3 border-t border-border'>
@@ -284,6 +287,9 @@ export default function NewClassForm() {
                     mode='single'
                     selected={field.value}
                     onSelect={field.onChange}
+                    disabled={(date) =>
+                      date < new Date(new Date().setHours(0, 0, 0, 0))
+                    }
                     initialFocus
                   />
                   <div className='p-3 border-t border-border'>
