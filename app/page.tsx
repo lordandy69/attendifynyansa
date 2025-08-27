@@ -12,6 +12,8 @@ export default async function Home() {
     redirect("/class");
   }
 
+
+
   return (
     <main className=" ">
       {/* <section className="bg-slate-200 rounded-3xl w-full  h-full flex justify-center items-center"> */}
